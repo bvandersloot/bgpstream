@@ -38,6 +38,7 @@ pub enum ElementError {
     AsnParseError,
     Utf8Error(String),
     UnexpectedType,
+    StringParseError,
 }
 
 #[derive(Debug)]
@@ -45,6 +46,8 @@ pub struct Element {
     timestamp: SystemTime,
     peer_addr: IpAddr,
     peer_asn: ASN,
+    project: String,
+    collector: String,
     data: ElementData,
 }
 
@@ -92,7 +95,7 @@ type AsPath = Vec<PathEntry>;
 type CommunitySet = Vec<(ASN, u16)>;
 
 impl Element {
-    pub fn create(element : *mut bgpstream_sys::bgpstream_elem_t) -> Result<Self,ElementError> {
+    pub fn create(element : *mut bgpstream_sys::bgpstream_elem_t, record : *const bgpstream_sys::bgpstream_record_t) -> Result<Self,ElementError> {
         assert!(!element.is_null());
         let elem = unsafe{ (*element) };
         let element_type = match ElementType::from_u32(elem.type_) {
@@ -141,11 +144,14 @@ impl Element {
                 Err(ElementError::UnexpectedType)
             },
         }?;
-
+        let collector_buf = unsafe {&*(&(*record).attributes.dump_collector[..] as *const[i8] as *const[u8])};
+        let project_buf = unsafe {&*(&(*record).attributes.dump_project[..] as *const[i8] as *const[u8])};
         Ok(Element{
             timestamp: SystemTime::UNIX_EPOCH + Duration::from_secs(elem.timestamp as u64),
             peer_addr: parse_addr(elem.peer_address)?,
             peer_asn: elem.peer_asnumber,
+            collector: str_from_buf(collector_buf)?.to_owned(),
+            project: str_from_buf(project_buf)?.to_owned(),
             data: data,
         })
     }
@@ -205,6 +211,21 @@ fn as_path_from_str(path_str : &str) -> Result<AsPath, ElementError> {
         }
     }
     Ok(res)
+}
+
+fn str_from_buf(buf : &[u8]) -> Result<&str, ElementError> {
+    let len = buf.iter()
+        .enumerate()
+        .find(|&(_, &byte)| byte == 0)
+        .map_or_else(|| buf.len(), |(len, _)| len+1);
+    let c_str = CStr::from_bytes_with_nul(&buf[..len])?;
+    return Ok(c_str.to_str()?);
+}   
+
+impl std::convert::From<std::ffi::FromBytesWithNulError> for ElementError {
+    fn from(_e : std::ffi::FromBytesWithNulError) -> Self {
+        ElementError::StringParseError
+    }
 }
 
 impl std::convert::From<std::str::Utf8Error> for ElementError {

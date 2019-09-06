@@ -135,7 +135,7 @@ impl<'a> Iterator for Iter<'a> {
             self.stream.state = StreamState::Started;
             return self.next();
         }
-        let elem = Element::create(raw_elem);
+        let elem = Element::create(raw_elem, self.stream.record);
         match elem {
             Ok(some) => Some(Ok(some)),
             Err(element_err) => Some(Err(BGPStreamError::ElementFailure(element_err))),
