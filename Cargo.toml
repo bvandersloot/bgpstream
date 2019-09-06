@@ -1,10 +1,13 @@
 [package]
 name = "bgpstream"
-version = "0.2.3"
+version = "0.1.1"
 authors = ["Benjamin VanderSloot <admin@benvds.com>"]
+description = "Safe wrapper of a limited subset of libbgpstream"
+license = "CC-BY-NC-4.0"
+homepage = "https://github.com/bvandersloot/bgpstream"
+repository = "https://github.com/bvandersloot/bgpstream"
 
 [dependencies]
-bgpstream-sys = { git = "https://github.com/bvandersloot/bgpstream-sys" } 
-ffi = "*"
-num-traits = "0.2"
-num-derive = "0.2"
+bgpstream-sys = "^0.3"
+num-traits = "^0.2"
+num-derive = "^0.2"
