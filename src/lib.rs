@@ -3,8 +3,8 @@ extern crate bgpstream_sys;
 extern crate num_derive;
 extern crate num_traits;
 
-mod element;
-mod stream;
+pub mod element;
+pub mod stream;
 mod tests;
 
 

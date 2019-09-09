@@ -1,4 +1,3 @@
-use super::stream::Stream;
 #[cfg(test)]
 
 #[test]
