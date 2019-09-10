@@ -1,4 +1,5 @@
 #[cfg(test)]
+use super::stream::Stream;
 
 #[test]
 fn biggun() {

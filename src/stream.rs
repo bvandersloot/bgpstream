@@ -30,8 +30,8 @@ pub struct Stream {
     state: StreamState,
 }
 
-pub struct Iter<'a> {
-    stream  : &'a mut Stream,
+pub struct Iter {
+    stream  : Stream,
 }
 
 impl Stream {
@@ -76,7 +76,7 @@ impl Stream {
         Ok(())
     }
 
-    pub fn iter(&mut self) -> Result<Iter, BGPStreamError> {
+    pub fn iter(mut self) -> Result<Iter, BGPStreamError> {
         if self.state >= StreamState::Started {
             return Err(BGPStreamError::OperationOutOfOrder("Must start after interval is set and can only be done once".to_string()));
         }
@@ -109,7 +109,7 @@ impl Drop for Stream {
     }
 }
 
-impl<'a> Iterator for Iter<'a> {
+impl Iterator for Iter {
     type Item = Result<Element, BGPStreamError>;
     fn next(&mut self) -> Option<Result<Element, BGPStreamError>> {
         let current_state = self.stream.state;
