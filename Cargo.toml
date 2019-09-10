@@ -1,6 +1,6 @@
 [package]
 name = "bgpstream"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Benjamin VanderSloot <admin@benvds.com>"]
 description = "Safe wrapper of a limited subset of libbgpstream"
 license = "CC-BY-NC-4.0"

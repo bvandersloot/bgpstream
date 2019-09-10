@@ -160,7 +160,7 @@ impl Element {
 fn parse_addr(addr : bgpstream_sys::bgpstream_addr_storage_t) -> Result<IpAddr, ElementError> {
     unsafe {
         match bgpstream_sys::bgpstream_ipv2number(addr.version) {
-            4 => Ok(IpAddr::V4(Ipv4Addr::from(addr.__bindgen_anon_1.ipv4.s_addr))),
+            4 => Ok(IpAddr::V4(Ipv4Addr::from(addr.__bindgen_anon_1.ipv4.s_addr.swap_bytes()))),
             6 => Ok(IpAddr::V6(Ipv6Addr::from(addr.__bindgen_anon_1.ipv6.__u6_addr.__u6_addr8))),
             _ => Err(ElementError::IpParseError(format!("Incorrect address version {}", addr.version))),
         }
