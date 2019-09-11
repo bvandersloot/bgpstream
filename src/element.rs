@@ -90,9 +90,9 @@ pub enum PathEntry {
     Collection(Vec<ASN>),
 }
 
-type AsPath = Vec<PathEntry>;
+pub type AsPath = Vec<PathEntry>;
 
-type CommunitySet = Vec<(ASN, u16)>;
+pub type CommunitySet = Vec<(ASN, u16)>;
 
 impl Element {
     pub fn create(element : *mut bgpstream_sys::bgpstream_elem_t, record : *const bgpstream_sys::bgpstream_record_t) -> Result<Self,ElementError> {
