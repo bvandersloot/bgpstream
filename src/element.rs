@@ -20,7 +20,7 @@ enum ElementType {
 }
 
 #[repr(u32)]
-#[derive(FromPrimitive, Debug, Serialize, Deserialize)]
+#[derive(FromPrimitive, Debug, Serialize, Deserialize, Clone)]
 pub enum PeerState {
     Active = bgpstream_sys::bgpstream_elem_peerstate_t_BGPSTREAM_ELEM_PEERSTATE_ACTIVE,
     Clearing = bgpstream_sys::bgpstream_elem_peerstate_t_BGPSTREAM_ELEM_PEERSTATE_CLEARING,
@@ -42,7 +42,7 @@ pub enum ElementError {
     StringParseError,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Element {
     pub timestamp: SystemTime,
     pub peer_addr: IpAddr,
@@ -52,7 +52,7 @@ pub struct Element {
     pub data: ElementData,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum ElementData {
     Announcement(AnnouncementData),
     Rib(AnnouncementData),
@@ -60,7 +60,7 @@ pub enum ElementData {
     PeerState(PeerData),
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct AnnouncementData {
     pub prefix: Prefix,
     pub next_hop: IpAddr,
@@ -68,24 +68,24 @@ pub struct AnnouncementData {
     pub communities: CommunitySet,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct PeerData {
     pub old_peer_state: PeerState,
     pub new_peer_state: PeerState,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct WithdrawlData {
     pub prefix: Prefix,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Prefix {
     pub addr: IpAddr,
     pub length: u8,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum PathEntry {
     As(ASN),
     Collection(Vec<ASN>),
