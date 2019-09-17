@@ -1,5 +1,6 @@
 
 use num_traits::FromPrimitive;
+use serde::{Serialize, Deserialize};
 use std::error::Error;
 use std::ffi::CStr;
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
@@ -19,7 +20,7 @@ enum ElementType {
 }
 
 #[repr(u32)]
-#[derive(FromPrimitive, Debug)]
+#[derive(FromPrimitive, Debug, Serialize, Deserialize)]
 pub enum PeerState {
     Active = bgpstream_sys::bgpstream_elem_peerstate_t_BGPSTREAM_ELEM_PEERSTATE_ACTIVE,
     Clearing = bgpstream_sys::bgpstream_elem_peerstate_t_BGPSTREAM_ELEM_PEERSTATE_CLEARING,
@@ -41,7 +42,7 @@ pub enum ElementError {
     StringParseError,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Element {
     pub timestamp: SystemTime,
     pub peer_addr: IpAddr,
@@ -51,7 +52,7 @@ pub struct Element {
     pub data: ElementData,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum ElementData {
     Announcement(AnnouncementData),
     Rib(AnnouncementData),
@@ -59,7 +60,7 @@ pub enum ElementData {
     PeerState(PeerData),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct AnnouncementData {
     pub prefix: Prefix,
     pub next_hop: IpAddr,
@@ -67,24 +68,24 @@ pub struct AnnouncementData {
     pub communities: CommunitySet,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct PeerData {
     pub old_peer_state: PeerState,
     pub new_peer_state: PeerState,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct WithdrawlData {
     pub prefix: Prefix,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Prefix {
     pub addr: IpAddr,
     pub length: u8,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum PathEntry {
     As(ASN),
     Collection(Vec<ASN>),

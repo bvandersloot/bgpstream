@@ -11,3 +11,4 @@ repository = "https://github.com/bvandersloot/bgpstream"
 bgpstream-sys = "^0.3"
 num-traits = "^0.2"
 num-derive = "^0.2"
+serde = {version = "1.0", features = ["derive"]}
