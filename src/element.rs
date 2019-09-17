@@ -43,12 +43,12 @@ pub enum ElementError {
 
 #[derive(Debug)]
 pub struct Element {
-    timestamp: SystemTime,
-    peer_addr: IpAddr,
-    peer_asn: ASN,
-    project: String,
-    collector: String,
-    data: ElementData,
+    pub timestamp: SystemTime,
+    pub peer_addr: IpAddr,
+    pub peer_asn: ASN,
+    pub project: String,
+    pub collector: String,
+    pub data: ElementData,
 }
 
 #[derive(Debug)]
@@ -61,27 +61,27 @@ pub enum ElementData {
 
 #[derive(Debug)]
 pub struct AnnouncementData {
-    prefix: Prefix,
-    next_hop: IpAddr,
-    as_path: AsPath,
-    communities: CommunitySet,
+    pub prefix: Prefix,
+    pub next_hop: IpAddr,
+    pub as_path: AsPath,
+    pub communities: CommunitySet,
 }
 
 #[derive(Debug)]
 pub struct PeerData {
-    old_peer_state: PeerState,
-    new_peer_state: PeerState,
+    pub old_peer_state: PeerState,
+    pub new_peer_state: PeerState,
 }
 
 #[derive(Debug)]
 pub struct WithdrawlData {
-    prefix: Prefix,
+    pub prefix: Prefix,
 }
 
 #[derive(Debug)]
 pub struct Prefix {
-    addr: IpAddr,
-    length: u8,
+    pub addr: IpAddr,
+    pub length: u8,
 }
 
 #[derive(Debug)]
